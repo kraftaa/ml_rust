@@ -1,0 +1,33 @@
+[package]
+name = "ml_rust"
+version = "0.1.0"
+authors = ["Maria Dubyaga <kraftaa@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+#smartcore = { version = "0.1.0", features=["nalgebra-bindings"]}
+smartcore = { version = "0.2.0", features=["nalgebra-bindings"]}
+nalgebra = { version="0.22.0", features = ["serde-serialize"]}
+serde = { version="1.0.115", features = ["derive"]}
+bincode = "1.3.1"
+csv = "1.1"
+#
+## See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+#
+#[dependencies]
+#linfa = "0.3.1"
+#linfa-clustering = "0.3.1"
+#ndarray = "0.13.0"
+#rand_isaac = "0.3.0"
+#rand_os = "0.2.2"
+##rand_isaac = "*"
+#rand_hc = "0.3.0"
+#ndarray-rand = "0.11.0"
+#rand_core = "0.6.2"
+#rand = "0.8.2"
+#isaac-rng = "0.0.0"
+#pcg_rand = "0.13.0"
+#rand_pcg = "0.13.0"
+
+#rand = {git="https://github.com/rust-random/rand.git"}
+#ndarray_npy = "0.13.0"
