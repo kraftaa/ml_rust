@@ -14,6 +14,7 @@ use smartcore::metrics::mean_absolute_error;
 use csv::StringRecord;
 // fn read_csv(path: &str)  -> (usize,usize, Vec<f64>, Vec<String>) {
 // fn read_csv(path: &str)  {
+// fn read_csv(path: &str)  -> (Result<DenseMatrix<f32>, Box<dyn std::error::Error>>, Vec<String>, Vec<f32>) {
 // fn read_csv(path: &str)  -> (Result<DMatrix<f32>, Box<dyn std::error::Error>>, Vec<String>, Vec<f32>) {
 fn read_csv(path: &str)  -> (Result<Vec<f32>, Box<dyn std::error::Error>>, Vec<String>, Vec<f32>, usize, usize) {
 // fn read_csv(path: &str)  -> (Result<(), Box<dyn std::error::Error>>, &StringRecord) {
@@ -54,8 +55,12 @@ fn read_csv(path: &str)  -> (Result<Vec<f32>, Box<dyn std::error::Error>>, Vec<S
     // println!("{:?} target" , target);
     // (Ok(()), headers)
     // println!("{:#?} matrix", DMatrix::from_row_slice(rows, cols, &data[..]));
+    // println!("{:#?} matrix array", DenseMatrix::from_array(rows, cols, &data[..]));
+
+    // (Ok(DenseMatrix::from_array(rows, cols, &data[..])), headers, target)
     // (Ok(DMatrix::from_row_slice(rows, cols, &data[..])), headers, target)
     (Ok(data), headers, target, rows, cols)
+
     // (Ok((rows, cols, &data[..])), headers)
     // Ok(())
     //     (rows, cols, data, headers)
@@ -100,13 +105,14 @@ use smartcore::dataset::*;
 use smartcore::linalg::naive::dense_matrix::DenseMatrix;
 fn linear_regr(path: &str){
 // fn linear_regr(){
+//     let (file, headers, target)  = read_csv(path);
     let (file, headers, target, rows, cols)  = read_csv(path);
 
     // let boston = DMatrix::from_row_slice(rows, cols, &data[..]);
     let file_data = file.unwrap();
 
     let dataset_file = Dataset {
-        // data: file_data.data.as_vec().to_vec(),
+        // data: file_data.data().as_vec().to_vec(), // for dmatrix
         data: file_data,
         target,
         // num_samples: file_data.nrows(),
