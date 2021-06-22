@@ -12,13 +12,9 @@ use smartcore::neighbors::knn_classifier::KNNClassifier;
 use smartcore::model_selection::train_test_split;
 use smartcore::metrics::mean_absolute_error;
 use csv::StringRecord;
-// fn read_csv(path: &str)  -> (usize,usize, Vec<f64>, Vec<String>) {
-// fn read_csv(path: &str)  {
-// fn read_csv(path: &str)  -> (Result<DenseMatrix<f32>, Box<dyn std::error::Error>>, Vec<String>, Vec<f32>) {
+
 // fn read_csv(path: &str)  -> (Result<DMatrix<f32>, Box<dyn std::error::Error>>, Vec<String>, Vec<f32>) {
 fn read_csv(path: &str)  -> (Result<Vec<f32>, Box<dyn std::error::Error>>, Vec<String>, Vec<f32>, usize, usize) {
-// fn read_csv(path: &str)  -> (Result<(), Box<dyn std::error::Error>>, &StringRecord) {
-// fn read_csv(path: &str)  -> Result<(), Box<dyn std::error::Error>> {
     let mut reader = csv::Reader::from_path(path).unwrap();
     let headers2 = &reader.headers().unwrap();
     // println!("{:?}", headers2);
@@ -31,7 +27,6 @@ fn read_csv(path: &str)  -> (Result<Vec<f32>, Box<dyn std::error::Error>>, Vec<S
     let mut rows = 0;
     let mut data = vec![];
     let mut target = vec![];
-    // for result in reader.records() {
     for result in reader.deserialize() {
         rows += 1;
         let record:Vec<f32> = result.unwrap();
@@ -48,24 +43,15 @@ fn read_csv(path: &str)  -> (Result<Vec<f32>, Box<dyn std::error::Error>>, Vec<S
             }
             count += 1;
         }
-        // data.push(record);
     }
-    // println!("{:?}", data);
     let cols = data.len()/ rows;
-    // println!("{:?} target" , target);
-    // (Ok(()), headers)
-    // println!("{:#?} matrix", DMatrix::from_row_slice(rows, cols, &data[..]));
-    // println!("{:#?} matrix array", DenseMatrix::from_array(rows, cols, &data[..]));
 
     // (Ok(DenseMatrix::from_array(rows, cols, &data[..])), headers, target)
     // (Ok(DMatrix::from_row_slice(rows, cols, &data[..])), headers, target)
     (Ok(data), headers, target, rows, cols)
-
-    // (Ok((rows, cols, &data[..])), headers)
-    // Ok(())
-    //     (rows, cols, data, headers)
 }
 
+// don't use this one, as it needs data cleaned from headers, i need to read the full csv
 fn parse_csv<N, R>(input: R) -> Result<DMatrix<N>, Box<dyn std::error::Error>>
     where N: FromStr + Scalar,
           N::Err: std::error::Error,
@@ -98,9 +84,6 @@ fn parse_csv<N, R>(input: R) -> Result<DMatrix<N>, Box<dyn std::error::Error>>
     Ok(DMatrix::from_row_slice(rows, cols, &data[..]))
 }
 
-// ["CRIM", "ZN", "INDUS", "CHAS", "NOX", "RM", "AGE", "DIS", "RAD", "TAX", "PTRATIO", "B", "LSTAT"]
-// ["price"]
-//["crim", "zn", "indus", "chas", "nox", "rm", "age", "dis", "rad", "tax", "ptratio", "b", "lstat", "medv"]
 use smartcore::dataset::*;
 use smartcore::linalg::naive::dense_matrix::DenseMatrix;
 fn linear_regr(path: &str){
@@ -123,8 +106,7 @@ fn linear_regr(path: &str){
         target_names: vec![headers.last().unwrap().clone()],
         description: "trying some stuff".to_string(),
     };
-    // println!("{:?} feature_names", dataset_file.feature_names);
-    // println!("{:?} file-data", dataset_file.data);
+
     println!("{:?} file-data", dataset_file);
     println!("dataset_ready");
     let x = DenseMatrix::from_array(
@@ -133,7 +115,7 @@ fn linear_regr(path: &str){
     let y = dataset_file.target;
     println!("after y");
 
-
+// to check dataset and results
 //     let boston = boston::load_dataset();
 //         let x = DenseMatrix::from_array(
 //         boston.num_samples,
@@ -174,59 +156,9 @@ fn linear_regr(path: &str){
     println!("MSE: {}", mean_squared_error(&y_test, &y_hat_lr));
     println!("mae: {}", mean_absolute_error(&y_test, &y_hat_lr));
     println!("r2: {}", r2(&y_test, &y_hat_lr));
-
-    // let boston = boston::load_dataset();
-    // println!("{:?}", boston.num_features);
-    // println!("{:?}", boston.num_samples);
-    // println!("{:?}", boston.target); // last column of values
-    // println!("{:?}", boston.num_features);
-    // println!("{:?}", boston.feature_names);
-    // println!("{:?}", boston.target_names); // headers
-    // println!("{:?}", boston.description);
-//     println!("{:?} boston", boston);
-// // Transform dataset into a NxM matrix
-//     let x = DenseMatrix::from_array(
-//         boston.num_samples,
-//         boston.num_features,
-//         &boston.data,
-//     );
-// // These are our target class labels
-//     let y = boston.target;
-// // Split dataset into training/test (80%/20%)
-//     let (x_train, x_test, y_train, y_test) = train_test_split(&x, &y, 0.2, true);
-// // Linear Regression
-//     let y_hat_lr = LinearRegression::fit(&x_train, &y_train, Default::default())
-//         .and_then(|lr| lr.predict(&x_test)).unwrap();
-// // Calculate test error
-//
-//     println!("MSE: {}", mean_squared_error(&y_test, &y_hat_lr));
-// //
-//     use smartcore::linalg::naive::dense_matrix::*;
-//     use smartcore::linear::linear_regression::*;
-//     let lin_reg = LinearRegression::fit(&x, &y,
-//                                    LinearRegressionParameters::default().
-//                                        with_solver(LinearRegressionSolverName::QR)).unwrap();
-//
-//     let y_hat_lin = lin_reg.predict(&x).unwrap();
-//     println!("y_hat: {:?}", y_hat_lin);
-//     println!("intercept: {:?}", lin_reg.intercept());
-//     println!("coeff: {:?}", lin_reg.coefficients());
-
-
-    // let log_reg = LogisticRegression::fit(&x, &y, Default::default()).unwrap();
-    // println!("log");
-    // let y_hat_log = log_reg.predict(&x).unwrap();
-    // println!("y_hat: {:?}", y_hat_log);
-    let  cols1 = 2;
-    let rows1 = 3;
-    let data1 = vec![0.1, 0.2, 0.3, 0.4, 0.5, 0.6];
-    let matrix = DMatrix::from_row_slice(rows1, cols1, &data1[..]);
-    println!("{:?}", matrix);
-    let matrix_array = DenseMatrix::from_array(rows1, cols1, &data1[..]);
-    println!("{:#?}", matrix_array);
-
 }
 
+// from medium -uses 0.1.0, and too much transformations, easier to do as above ^
 // fn linear_regr() {
 //     let time = Instant::now();
 //     let file = File::open("dataset.csv").unwrap();
@@ -283,6 +215,7 @@ use std::io;
 
 //
 // https://docs.rs/smartcore/0.1.0/smartcore/dataset/diabetes/index.html   datasets
+// creating my own dataset - working. now can load csv into dataset with read_csv()
 fn clustering() {
 // Load dataset
 //     let digits_data = digits::load_dataset();
