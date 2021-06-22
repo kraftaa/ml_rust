@@ -217,6 +217,13 @@ fn linear_regr(path: &str){
     // println!("log");
     // let y_hat_log = log_reg.predict(&x).unwrap();
     // println!("y_hat: {:?}", y_hat_log);
+    let  cols1 = 2;
+    let rows1 = 3;
+    let data1 = vec![0.1, 0.2, 0.3, 0.4, 0.5, 0.6];
+    let matrix = DMatrix::from_row_slice(rows1, cols1, &data1[..]);
+    println!("{:?}", matrix);
+    let matrix_array = DenseMatrix::from_array(rows1, cols1, &data1[..]);
+    println!("{:#?}", matrix_array);
 
 }
 
